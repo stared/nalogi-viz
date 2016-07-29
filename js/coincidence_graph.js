@@ -20,12 +20,6 @@ function CoincidenceGraph(selector) {
     return scaled.toFixed(scaled < 10 ? 1 : 0) + prefix.symbol;
   };
 
-  this.loadCSV = function (path) {
-    d3.csv(path, function (error, data) {
-      return data; // TODO
-    });
-  };
-
   this.draw = function (graph, options) {
 
     var options = options || {};
@@ -59,7 +53,7 @@ function CoincidenceGraph(selector) {
 
     var opacityScale = d3.scale.log()
       .domain([1, maxOe])
-      .range([0, 0.75]);
+      .range([0, 1]);
 
     var force = d3.layout.force()
         .charge(function (d) { return baseCharge * sizeScale(d.count); })
@@ -83,9 +77,18 @@ function CoincidenceGraph(selector) {
         .style("opacity", 0.8)
         .on("mouseover", function (d) {
           node.style("opacity", function (d2) {
-            return (d === d2 || _.some(graph.links, function (link) {
-              return (link.target === d && link.source === d2) || (link.source === d && link.target === d2)
-            })) ? 1 : 0.2;
+            var link;
+            if (d === d2) {
+              return 1;
+            } else {
+              for (var i = 0; i < graph.links.length; i++) {
+                link = graph.links[i];
+                if ((link.target === d && link.source === d2) || (link.source === d && link.target === d2)) {
+                  return opacityScale(link.oe);
+                }
+              }
+              return 0;
+            }
           });
           tooltip.show(siNumberApprox(d.count).replace("k", " tys.") + ":<br>" + d.name);
         })
