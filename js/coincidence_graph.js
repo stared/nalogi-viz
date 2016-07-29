@@ -33,7 +33,7 @@ function CoincidenceGraph(selector) {
       .keys()
       .value();
 
-    var colors = d3.scale.category10()
+    var colors = d3.scale.category10()  // XXX inne mapowanie kolorow
       .domain(this.categories);
 
     graph.links = graph.links.sort(function (a, b) {
@@ -51,7 +51,7 @@ function CoincidenceGraph(selector) {
 
     var maxOe = d3.max(graph.links, function (e) { return e.oe; });
 
-    var opacityScale = d3.scale.pow().exponent(0.25)
+    var opacityScale = d3.scale.pow().exponent(0.1)  // XXX do podswietlania moze raczej prawdopodobienstwo warunkowe?
       .domain([options.eoThresholdMin, maxOe])
       .range([0, 1]);
 
@@ -90,6 +90,7 @@ function CoincidenceGraph(selector) {
               return 0;
             }
           });
+          // XXX napis(?) pod zamist niepasujacego tooltipa
           tooltip.show(siNumberApprox(d.count).replace("k", " tys.") + ":<br>" + d.name);
         })
         .on("mouseout", function () {
