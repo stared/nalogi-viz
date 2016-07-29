@@ -45,14 +45,14 @@ function CoincidenceGraph(selector) {
       return e.oe > eoThresholdMin; // || e.oe < 0.5;
     });
 
-    var sizeScale = d3.scale.pow().exponent(0.1)
-      .domain([1, d3.max(graph.nodes, function (d) { return d.count; })])
+    var sizeScale = d3.scale.pow().exponent(0.25)
+      .domain([0, d3.max(graph.nodes, function (d) { return d.count; })])
       .range([0, maxSize]);
 
     var maxOe = d3.max(graph.links, function (e) { return e.oe; });
 
-    var opacityScale = d3.scale.log()
-      .domain([1, maxOe])
+    var opacityScale = d3.scale.pow().exponent(0.25)
+      .domain([options.eoThresholdMin, maxOe])
       .range([0, 1]);
 
     var force = d3.layout.force()
