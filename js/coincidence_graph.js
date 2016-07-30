@@ -1,10 +1,11 @@
 /* global d3 Tooltip */
 
+// adapted to this data, not the original, general one
 function CoincidenceGraph(selector) {
   "use strict";
 
   var width = 900,
-      height = 700;
+      height = 600;
 
   var svg = d3.select(selector).append("svg")
     .attr("width", width)
@@ -126,7 +127,7 @@ function CoincidenceGraph(selector) {
     legend.g.attr("transform", "translate(650, 50)");
 
     var legendList = this.categories.map(function (cat) {
-      return {name: cat, color: colors(cat)};
+      return {name: cat.toUpperCase(), color: colors(cat)};
     })
 
     legend.create(legendList);

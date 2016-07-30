@@ -35,3 +35,7 @@ div.tooltip
     left: 20px;
     z-index: 0;
 }
+
+.legend-box, .legend-label {
+  cursor: default;
+}
