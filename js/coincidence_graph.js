@@ -30,7 +30,7 @@ function CoincidenceGraph(selector) {
     // colors from # d3.scale.category10()
     var colors = d3.scale.ordinal()
       .domain(this.categories)
-      .range(["#1f77b4", "#d62728", "#2ca02c"]);
+      .range(["#1f77b4", "#2ca02c", "#d62728"]);
 
     this.colors = colors;
 
