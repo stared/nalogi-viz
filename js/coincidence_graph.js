@@ -1,5 +1,3 @@
-/* global d3 Tooltip */
-
 // adapted to this data, not the original, general one
 function CoincidenceGraph(selector) {
   "use strict";
@@ -12,8 +10,6 @@ function CoincidenceGraph(selector) {
     .attr("height", height);
 
   var g = svg.append("g");
-
-  var tooltip = new Tooltip(selector);
 
   var siNumberApprox = function (x) {
     var prefix = d3.formatPrefix(x);
@@ -92,12 +88,9 @@ function CoincidenceGraph(selector) {
               return 0;
             }
           });
-          // XXX napis(?) pod zamist niepasujacego tooltipa
-          tooltip.show(siNumberApprox(d.count).replace("k", " tys.") + ":<br>" + d.name);
         })
         .on("mouseout", function () {
           node.style("opacity", 0.8);
-          tooltip.out();
         })
         .text(function (d) { return d.name.toLowerCase(); });
 
