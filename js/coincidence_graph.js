@@ -28,13 +28,14 @@ function CoincidenceGraph(selector) {
     var eoThresholdMin = options.eoThresholdMin || 1.25;
     var muteCategory = options.muteCategory || false;
 
-    this.categories = _.chain(graph.nodes)
-      .countBy('category')
-      .keys()
-      .value();
+    this.categories = ["Nałóg", "Daje", "Zwalcza"];
 
-    var colors = d3.scale.category10()  // XXX inne mapowanie kolorow
-      .domain(this.categories);
+    // colors from # d3.scale.category10()
+    var colors = d3.scale.ordinal()
+      .domain(this.categories)
+      .range(["#1f77b4", "#d62728", "#2ca02c"]);
+
+    this.colors = colors;
 
     graph.links = graph.links.sort(function (a, b) {
       return b.count - a.count;
@@ -118,8 +119,7 @@ function CoincidenceGraph(selector) {
 
   this.createLegend = function () {
 
-    var colors = d3.scale.category10()
-      .domain(this.categories);
+    var colors = this.colors;
 
     var legend = new Legend(selector + " svg");
 
