@@ -43,14 +43,19 @@ function CoincidenceGraph(selector) {
       return e.oe > eoThresholdMin; // || e.oe < 0.5;
     });
 
+    graph.links.forEach(function (e) {
+      e.PMI = Math.log(e.oe);
+    });
+
     var sizeScale = d3.scale.pow().exponent(0.25)
       .domain([0, d3.max(graph.nodes, function (d) { return d.count; })])
       .range([0, maxSize]);
 
-    var maxOe = d3.max(graph.links, function (e) { return e.oe; });
+    var maxPMI = d3.max(graph.links, function (e) { return e.PMI; });
+    console.log("maxPMI", maxPMI);
 
-    var opacityScale = d3.scale.pow().exponent(0.1)  // XXX do podswietlania moze raczej prawdopodobienstwo warunkowe?
-      .domain([options.eoThresholdMin, maxOe])
+    var opacityScale = d3.scale.pow().exponent(0.5)  // XXX do podswietlania moze raczej prawdopodobienstwo warunkowe?
+      .domain([0, maxPMI])
       .range([0, 1]);
 
     var force = d3.layout.force()
@@ -59,7 +64,7 @@ function CoincidenceGraph(selector) {
         .gravity(0.4)
         .size([width - 200, height])
         .linkStrength(function (e) {
-          return e.oe > 1 ? (e.oe - 1) / (maxOe - 1) : 0;
+          return e.PMI > 0 ? e.PMI/maxPMI : 0;
         })
         .nodes(graph.nodes)
         .links(graph.links);
@@ -82,7 +87,8 @@ function CoincidenceGraph(selector) {
               for (var i = 0; i < graph.links.length; i++) {
                 link = graph.links[i];
                 if ((link.target === d && link.source === d2) || (link.source === d && link.target === d2)) {
-                  return opacityScale(link.oe);
+                  console.log(d.name, d2.name, "PMI", link.PMI.toFixed(2), "scaled:", opacityScale(link.PMI).toFixed(2));
+                  return opacityScale(link.PMI);
                 }
               }
               return 0;

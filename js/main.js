@@ -3,7 +3,7 @@
 d3.json("data/nalogi.json", function (error, data) {
 
   var cGraph = new CoincidenceGraph("#d3graph");
-  cGraph.draw(data, {baseCharge: -30, maxSize: 30, eoThresholdMin: 0.7});
+  cGraph.draw(data, {baseCharge: -40, maxSize: 30, eoThresholdMin: 1});
   cGraph.createLegend();
 
 });
