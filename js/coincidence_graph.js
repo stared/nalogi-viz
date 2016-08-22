@@ -57,12 +57,16 @@ function CoincidenceTextGraph(selector) {
       .domain([0, maxCount])
       .range([0, maxSize]);
 
+    this.sizeScale = sizeScale;
+
     var maxPMI = d3.max(graph.links, function (e) { return e.PMI; });
     console.log("maxPMI", maxPMI);
 
     var opacityScale = d3.scale.pow().exponent(0.5)  // XXX do podswietlania moze raczej prawdopodobienstwo warunkowe?
       .domain([0, maxPMI])
       .range([0, 1]);
+
+    this.opacityScale = opacityScale;
 
     var force = d3.layout.force()
         .charge(function (d) { return baseCharge * sizeScale(d.count); })
@@ -121,11 +125,46 @@ function CoincidenceTextGraph(selector) {
         //     .attr("y2", function(e) { return e.target.y; });
     });
 
-    // sizes
-    
+  };
+
+  this.createLegend = function () {
+
+    var that = this;
+
+    var boxSize = 20;
     var legendSpacing = 25;
+    var labelMargin = 30;
     var fontSize = 14;
 
+    // categories
+
+    var legendCategory = g.append("g")
+      .attr("transform", "translate(650, 50)");
+
+    var legendCategoryItem = legendCategory.selectAll("g")
+      .data(that.categories)
+      .enter()
+      .append("g")
+        .attr("transform", function (d, i) {
+          return "translate(0," + (i * legendSpacing) + ")"
+        });
+
+    legendCategoryItem.append('rect')
+      .attr('class', 'legend-box')
+      .attr('x', 0)
+      .attr('width', boxSize)
+      .attr('height', boxSize)
+      .style('fill', function (d) { return that.colors(d); });
+
+    legendCategoryItem.append('text')
+      .attr('class', 'legend-label')
+      .attr('x', labelMargin)
+      .attr('y', 0.75 * boxSize)
+      .text(function (d) { return d; })
+      .style("font-size", "" + fontSize + "px");
+
+    // sizes
+    
     var legendSize = g.append("g")
       .attr("transform", "translate(650, 200)");
 
@@ -139,15 +178,15 @@ function CoincidenceTextGraph(selector) {
 
     legendSizeItem.append("text")
       .attr("class", "legend-label")
-      .attr("x", 10)
+      .attr("x", boxSize / 2)
       .style("text-anchor", "middle")
       .style("dominant-baseline", "middle")
-      .style("font-size", function (d) { return sizeScale(d); })
+      .style("font-size", function (d) { return that.sizeScale(d); })
       .text("x");
 
     legendSizeItem.append("text")
       .attr("class", "legend-label")
-      .attr("x", 30)
+      .attr("x", labelMargin)
       .style("dominant-baseline", "middle")
       .style("font-size", "" + fontSize + "px")
       .text(function (d) { return "" + d + " wystąpień"; });
@@ -167,36 +206,19 @@ function CoincidenceTextGraph(selector) {
 
     legendOpacityItem.append("text")
       .attr("class", "legend-label")
-      .attr("x", 10)
+      .attr("x", boxSize / 2)
       .style("text-anchor", "middle")
       .style("dominant-baseline", "middle")
       .style("font-size", "" + fontSize + "px")
-      .style("opacity", function (d) { return opacityScale(Math.log(d)); })
+      .style("opacity", function (d) { return that.opacityScale(Math.log(d)); })
       .text("x");
 
     legendOpacityItem.append("text")
       .attr("class", "legend-label")
-      .attr("x", 30)
+      .attr("x", labelMargin)
       .style("dominant-baseline", "middle")
       .style("font-size", "" + fontSize + "px")
       .text(function (d) { return "" + d + "x częściej niż losowo"; });
-
-    };
-
-
-  this.createLegend = function () {
-
-    var colors = this.colors;
-
-    var legend = new Legend(selector + " svg");
-
-    legend.g.attr("transform", "translate(650, 50)");
-
-    var legendList = this.categories.map(function (cat) {
-      return {name: cat.toUpperCase(), color: colors(cat)};
-    })
-
-    legend.create(legendList);
 
   };
 
