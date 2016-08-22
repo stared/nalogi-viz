@@ -99,7 +99,6 @@ function CoincidenceTextGraph(selector) {
               for (var i = 0; i < graph.links.length; i++) {
                 link = graph.links[i];
                 if ((link.target === d && link.source === d2) || (link.source === d && link.target === d2)) {
-                  console.log(d.name, d2.name, "PMI", link.PMI.toFixed(2), "scaled:", opacityScale(link.PMI).toFixed(2));
                   return opacityScale(link.PMI);
                 }
               }
@@ -121,10 +120,6 @@ function CoincidenceTextGraph(selector) {
         node.attr("x", function(d) { return d.x; })
             .attr("y", function(d) { return d.y; });
 
-        // link.attr("x1", function(e) { return e.source.x; })
-        //     .attr("y1", function(e) { return e.source.y; })
-        //     .attr("x2", function(e) { return e.target.x; })
-        //     .attr("y2", function(e) { return e.target.y; });
     });
 
   };
