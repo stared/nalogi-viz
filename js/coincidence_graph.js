@@ -28,7 +28,7 @@ function CoincidenceTextGraph(selector) {
     var muteCategory = options.muteCategory || false;
 
     this.categories = ["nałóg", "daje", "zwalcza"];
-    this.countThresholds = [25, 250, 2500];
+    this.countThresholds = [10, 100, 1000];
     this.opacityThresholds = [2, 8, 32];
 
     // colors from # d3.scale.category10()
