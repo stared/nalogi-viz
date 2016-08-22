@@ -1,5 +1,5 @@
 // adapted to this data, not the original, general one
-function CoincidenceGraph(selector) {
+function CoincidenceTextGraph(selector) {
   "use strict";
 
   var width = 900,
