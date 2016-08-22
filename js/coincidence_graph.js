@@ -26,6 +26,8 @@ function CoincidenceTextGraph(selector) {
     var muteCategory = options.muteCategory || false;
 
     this.categories = ["Nałóg", "Daje", "Zwalcza"];
+    this.countThresholds = [25, 500, 2500];
+    this.opacityThresholds = [1.5, 6, 40];
 
     // colors from # d3.scale.category10()
     var colors = d3.scale.ordinal()
@@ -47,8 +49,12 @@ function CoincidenceTextGraph(selector) {
       e.PMI = Math.log(e.oe);
     });
 
+    var maxCount = d3.max(graph.nodes, function (d) { return d.count; });
+    console.log("minCount", d3.min(graph.nodes, function (d) { return d.count; }));
+    console.log("maxCount", maxCount);
+
     var sizeScale = d3.scale.pow().exponent(0.25)
-      .domain([0, d3.max(graph.nodes, function (d) { return d.count; })])
+      .domain([0, maxCount])
       .range([0, maxSize]);
 
     var maxPMI = d3.max(graph.links, function (e) { return e.PMI; });
@@ -115,7 +121,68 @@ function CoincidenceTextGraph(selector) {
         //     .attr("y2", function(e) { return e.target.y; });
     });
 
-  };
+    // sizes
+    
+    var legendSpacing = 25;
+    var fontSize = 14;
+
+    var legendSize = g.append("g")
+      .attr("transform", "translate(650, 200)");
+
+    var legendSizeItem = legendSize.selectAll("g")
+      .data(this.countThresholds)
+      .enter()
+      .append("g")
+        .attr("transform", function (d, i) {
+          return "translate(0," + (i * legendSpacing) + ")"
+        });
+
+    legendSizeItem.append("text")
+      .attr("class", "legend-label")
+      .attr("x", 10)
+      .style("text-anchor", "middle")
+      .style("dominant-baseline", "middle")
+      .style("font-size", function (d) { return sizeScale(d); })
+      .text("x");
+
+    legendSizeItem.append("text")
+      .attr("class", "legend-label")
+      .attr("x", 30)
+      .style("dominant-baseline", "middle")
+      .style("font-size", "" + fontSize + "px")
+      .text(function (d) { return "" + d + " wystąpień"; });
+
+    // opacity
+
+    var legendOpacity = g.append("g")
+      .attr("transform", "translate(650, 350)");
+
+    var legendOpacityItem = legendOpacity.selectAll("g")
+      .data(this.opacityThresholds)
+      .enter()
+      .append("g")
+        .attr("transform", function (d, i) {
+          return "translate(0," + (i * legendSpacing) + ")"
+        });
+
+    legendOpacityItem.append("text")
+      .attr("class", "legend-label")
+      .attr("x", 10)
+      .style("text-anchor", "middle")
+      .style("dominant-baseline", "middle")
+      .style("font-size", "" + fontSize + "px")
+      .style("opacity", function (d) { return opacityScale(Math.log(d)); })
+      .text("x");
+
+    legendOpacityItem.append("text")
+      .attr("class", "legend-label")
+      .attr("x", 30)
+      .style("dominant-baseline", "middle")
+      .style("font-size", "" + fontSize + "px")
+      .text(function (d) { return "" + d + "x częściej niż losowo"; });
+
+    };
+
 
   this.createLegend = function () {
 
