@@ -39,3 +39,11 @@ div.tooltip
 .legend-box, .legend-label {
   cursor: default;
 }
+
+g.credit {
+  cursor: pointer;
+}
+
+g.credit:hover {
+  opacity: 0.5;
+}

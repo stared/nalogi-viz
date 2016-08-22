@@ -2,8 +2,10 @@
 function CoincidenceTextGraph(selector) {
   "use strict";
 
-  var width = 900,
-      height = 600;
+  var width = 1000;
+  var height = 600;
+  var forceWidth = 750;
+  var fontSize = 14;
 
   var svg = d3.select(selector).append("svg")
     .attr("width", width)
@@ -72,7 +74,7 @@ function CoincidenceTextGraph(selector) {
         .charge(function (d) { return baseCharge * sizeScale(d.count); })
         .linkDistance(0)
         .gravity(0.4)
-        .size([width - 200, height])
+        .size([forceWidth, height])
         .linkStrength(function (e) {
           return e.PMI > 0 ? e.PMI/maxPMI : 0;
         })
@@ -134,12 +136,11 @@ function CoincidenceTextGraph(selector) {
     var boxSize = 20;
     var legendSpacing = 25;
     var labelMargin = 30;
-    var fontSize = 14;
 
     // categories
 
     var legendCategory = g.append("g")
-      .attr("transform", "translate(650, 50)");
+      .attr("transform", "translate(" + forceWidth + ", 50)");
 
     var legendCategoryItem = legendCategory.selectAll("g")
       .data(that.categories)
@@ -166,7 +167,7 @@ function CoincidenceTextGraph(selector) {
     // sizes
     
     var legendSize = g.append("g")
-      .attr("transform", "translate(650, 200)");
+      .attr("transform", "translate(" + forceWidth + ", 200)");
 
     var legendSizeItem = legendSize.selectAll("g")
       .data(this.countThresholds)
@@ -194,7 +195,7 @@ function CoincidenceTextGraph(selector) {
     // opacity
 
     var legendOpacity = g.append("g")
-      .attr("transform", "translate(650, 350)");
+      .attr("transform", "translate(" + forceWidth + ", 350)");
 
     var legendOpacityItem = legendOpacity.selectAll("g")
       .data(this.opacityThresholds)
@@ -221,6 +222,24 @@ function CoincidenceTextGraph(selector) {
       .text(function (d) { return "" + d + "x częściej niż losowo"; });
 
   };
+
+  this.credits = function () {
+
+    g.append("g")
+      .attr("class", "credit")
+      .attr("transform", "translate(" + (forceWidth + 30) + ", 500)")
+      .append("a")
+      .attr("xref:href", "http://p.migdal.pl")
+      .attr("target", "_blank")
+      .selectAll("text")
+      .data(["data by Mikołaj Czyż", "vis by Piotr Migdał", "2016"])
+      .enter()
+        .append("text")
+          .attr("y", function (d, i) { return 1.5 * fontSize * i; })
+          .style("font-size", "" + fontSize + "px")
+          .text(function (d) { return d; });
+
+  }
 
   this.remove = function () {
     svg.remove();
