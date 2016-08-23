@@ -6,6 +6,7 @@ function CoincidenceTextGraph(selector) {
   var height = 600;
   var forceWidth = 750;
   var fontSize = 14;
+  var transitionTime = 500;  // ms
 
   var svg = d3.select(selector).append("svg")
     .attr("width", width)
@@ -91,23 +92,27 @@ function CoincidenceTextGraph(selector) {
         })
         .style("opacity", 0.8)
         .on("mouseover", function (d) {
-          node.style("opacity", function (d2) {
-            var link;
-            if (d === d2) {
-              return 1;
-            } else {
-              for (var i = 0; i < graph.links.length; i++) {
-                link = graph.links[i];
-                if ((link.target === d && link.source === d2) || (link.source === d && link.target === d2)) {
-                  return opacityScale(link.PMI);
+          node.transition()
+            .duration(transitionTime)
+            .style("opacity", function (d2) {
+              var link;
+              if (d === d2) {
+                return 1;
+              } else {
+                for (var i = 0; i < graph.links.length; i++) {
+                  link = graph.links[i];
+                  if ((link.target === d && link.source === d2) || (link.source === d && link.target === d2)) {
+                    return opacityScale(link.PMI);
+                  }
                 }
+                return 0;
               }
-              return 0;
-            }
-          });
+            });
         })
         .on("mouseout", function () {
-          node.style("opacity", 0.8);
+          node.transition()
+            .duration(transitionTime)
+            .style("opacity", 0.8);
         })
         .text(function (d) { return d.name.toLowerCase(); });
 
@@ -148,12 +153,16 @@ function CoincidenceTextGraph(selector) {
         })
         .style("cursor", "pointer")
         .on("mouseover", function (d) {
-          that.node.style("opacity", function (d2) {
-            return d === d2.category ? 1 : 0.2;
-          });
+          that.node.transition()
+            .duration(transitionTime)
+            .style("opacity", function (d2) {
+              return d === d2.category ? 1 : 0.2;
+            });
         })
         .on("mouseout", function (d) {
-          that.node.style("opacity", 0.8);
+          that.node.transition()
+            .duration(transitionTime)
+            .style("opacity", 0.8);
         });
 
     legendCategoryItem.append('rect')
