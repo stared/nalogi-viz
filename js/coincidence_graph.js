@@ -218,23 +218,23 @@ function CoincidenceTextGraph(selector) {
 
   };
 
-  this.credits = function () {
+  // this.credits = function () {
 
-    g.append("g")
-      .attr("class", "credit")
-      .attr("transform", "translate(" + (forceWidth + 30) + ", 500)")
-      .append("a")
-      .attr("xref:href", "http://p.migdal.pl")
-      .attr("target", "_blank")
-      .selectAll("text")
-      .data(["data by Mikołaj Czyż", "vis by Piotr Migdał", "2016"])
-      .enter()
-        .append("text")
-          .attr("y", function (d, i) { return 1.5 * fontSize * i; })
-          .style("font-size", "" + fontSize + "px")
-          .text(function (d) { return d; });
+  //   g.append("g")
+  //     .attr("class", "credit")
+  //     .attr("transform", "translate(" + (forceWidth + 30) + ", 500)")
+  //     .append("a")
+  //     .attr("xref:href", "http://p.migdal.pl")
+  //     .attr("target", "_blank")
+  //     .selectAll("text")
+  //     .data(["data by Mikołaj Czyż", "vis by Piotr Migdał", "2016"])
+  //     .enter()
+  //       .append("text")
+  //         .attr("y", function (d, i) { return 1.5 * fontSize * i; })
+  //         .style("font-size", "" + fontSize + "px")
+  //         .text(function (d) { return d; });
 
-  }
+  // }
 
   this.remove = function () {
     svg.remove();

@@ -40,10 +40,31 @@ div.tooltip
   cursor: default;
 }
 
-g.credit {
-  cursor: pointer;
+a:link {
+  fill: black;
+  text-decoration: none;
 }
 
-g.credit:hover {
+a:hover {
+  fill: black;
+  text-decoration: none;
   opacity: 0.5;
+}
+
+a:visited {
+  fill: black;
+  text-decoration: none;
+}
+
+a:visited {
+  fill: black;
+  text-decoration: none;
+}
+
+#credits {
+  position: absolute;
+  top: 500px;
+  left: 750px;
+  font-family: Verdana;
+  font-size: 12px;
 }
