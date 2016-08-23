@@ -55,7 +55,7 @@ function CoincidenceTextGraph(selector) {
     console.log("minCount", d3.min(graph.nodes, function (d) { return d.count; }));
     console.log("maxCount", maxCount);
 
-    var sizeScale = d3.scale.pow().exponent(0.25)
+    var sizeScale = d3.scale.pow().exponent(0.15)
       .domain([0, maxCount])
       .range([0, maxSize]);
 
