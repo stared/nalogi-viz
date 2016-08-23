@@ -36,8 +36,14 @@ div.tooltip
     z-index: 0;
 }
 
-.legend-box, .legend-label {
+.legend-label {
   cursor: default;
+  font-family: Times;
+}
+
+.legend-hoverable-label {
+  cursor: pointer;
+  font-family: Times;
 }
 
 a:link {
@@ -65,6 +71,6 @@ a:visited {
   position: absolute;
   top: 500px;
   left: 750px;
-  font-family: Verdana;
+  font-family: Times;
   font-size: 12px;
 }

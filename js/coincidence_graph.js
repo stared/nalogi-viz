@@ -114,6 +114,8 @@ function CoincidenceTextGraph(selector) {
     var drag = force.drag();
     node.call(drag);
 
+    this.node = node;
+
     force.start();
 
     force.on("tick", function() {
@@ -143,6 +145,15 @@ function CoincidenceTextGraph(selector) {
       .append("g")
         .attr("transform", function (d, i) {
           return "translate(0," + (i * legendSpacing) + ")"
+        })
+        .style("cursor", "pointer")
+        .on("mouseover", function (d) {
+          that.node.style("opacity", function (d2) {
+            return d === d2.category ? 1 : 0.2;
+          });
+        })
+        .on("mouseout", function (d) {
+          that.node.style("opacity", 0.8);
         });
 
     legendCategoryItem.append('rect')
@@ -153,7 +164,7 @@ function CoincidenceTextGraph(selector) {
       .style('fill', function (d) { return that.colors(d); });
 
     legendCategoryItem.append('text')
-      .attr('class', 'legend-label')
+      .attr('class', 'legend-hoverable-label')
       .attr('x', labelMargin)
       .attr('y', 0.75 * boxSize)
       .text(function (d) { return d; })
