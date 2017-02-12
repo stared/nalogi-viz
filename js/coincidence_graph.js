@@ -96,6 +96,9 @@ function CoincidenceTextGraph(selector) {
     var that = this;
     d3.json(filepath, function (error, graph) {
       that.draw(graph, options);
+      if (options.legend) {
+        that.createLegend();
+      }
     });
   };
 
@@ -103,7 +106,17 @@ function CoincidenceTextGraph(selector) {
   this.fromCSV = function (filepath, options) {
     var that = this;
     d3.csv(filepath, function (error, rows) {
+      // not the nices way for categories, but should work
+      // for Legend
+      var categories = [];
+      for (var k in rows[0]) {
+        categories.push(k);
+      };
+      options.categories = categories;
       that.draw(that.rowsToGraph(rows), options);
+      if (options.legend) {
+        that.createLegend();
+      }
     });
   };
 
@@ -116,14 +129,19 @@ function CoincidenceTextGraph(selector) {
     var eoThresholdMin = options.eoThresholdMin || 1.25;
     var muteCategory = options.muteCategory || false;
 
-    this.categories = ["nałóg", "daje", "zwalcza"];
+    // TODO no predefined things here, move to main.js
+    this.categories = options.categories || ["nałóg", "daje", "zwalcza"];
+
     this.countThresholds = [10, 100, 1000];
+    this.countText = options.countText || "occurrences";
     this.opacityThresholds = [2, 8, 32];
+    this.opacityText = options.opacityText || "more than random";
 
     // colors from # d3.scale.category10()
     var colors = d3.scale.ordinal()
       .domain(this.categories)
       .range(["#1f77b4", "#2ca02c", "#d62728"]);
+    // TODO colors as an optional option
 
     this.colors = colors;
 
@@ -294,7 +312,7 @@ function CoincidenceTextGraph(selector) {
       .attr("x", labelMargin)
       .style("dominant-baseline", "middle")
       .style("font-size", "" + fontSize + "px")
-      .text(function (d) { return "" + d + " wystąpień"; });
+      .text(function (d) { return "" + d + " " + that.countText; });
 
     // opacity
 
@@ -323,7 +341,7 @@ function CoincidenceTextGraph(selector) {
       .attr("x", labelMargin)
       .style("dominant-baseline", "middle")
       .style("font-size", "" + fontSize + "px")
-      .text(function (d) { return "" + d + "x częściej niż losowo"; });
+      .text(function (d) { return "" + d + "x " + that.opacityText; });
 
   };
 
