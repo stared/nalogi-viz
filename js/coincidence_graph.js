@@ -20,6 +20,94 @@ function CoincidenceTextGraph(selector) {
     return scaled.toFixed(scaled < 10 ? 1 : 0) + prefix.symbol;
   };
 
+  this.rowsToGraph = function (rows) {
+    // here lodash would be really, really useful!
+
+    // we assume that all rows have the same keys
+    var categories = [];
+    for (var k in rows[0]) {
+      categories.push(k);
+    };
+    // assuming no commas in items
+    var itemId = function (k, v) {
+      return k + "," + v;
+    };
+
+    var nodesDict = {};
+    var key = "";
+    var id = 0;
+    rows.forEach(function (row) {
+      categories.forEach(function (cat) {
+        key = itemId(cat, row[cat]);
+        if (key in nodesDict) {
+          nodesDict[key].count += 1;
+        } else {
+          nodesDict[key] = {
+            name:     row[cat],
+            category: cat,
+            count:    1,
+            id:       id,
+          };
+          id++;
+        }
+      });
+    });
+    var nodes = [];
+    for (key in nodesDict) {
+      nodes.push(nodesDict[key]);
+    }
+
+    var edgesDict = {};
+    var key2 = "";
+    var pairKey = "";
+    rows.forEach(function (row) {
+      categories.forEach(function (cat) {
+        key = itemId(cat, row[cat]);
+        categories.forEach(function (cat2) {
+          key2 = itemId(cat2, row[cat2]);
+          if (cat < cat2) {
+            pairKey = key + "+" + key2;
+            if (pairKey in edgesDict) {
+              edgesDict[pairKey].count += 1;
+            } else {
+              edgesDict[pairKey] = {
+                source: nodesDict[key].id,
+                target: nodesDict[key2].id,
+                count:  1,
+              };
+            }
+          }
+        });
+      });
+    });
+    var links = [];
+    var link;
+    for (pairKey in edgesDict) {
+      link = edgesDict[pairKey];
+      link.oe = (link.count * rows.length) / (nodes[link.source].count * nodes[link.target].count);
+      links.push(link);
+    }
+
+    return {nodes: nodes, links: links};
+  };
+
+
+  this.fromJSON = function (filepath, options) {
+    var that = this;
+    d3.json(filepath, function (error, graph) {
+      that.draw(graph, options);
+    });
+  };
+
+
+  this.fromCSV = function (filepath, options) {
+    var that = this;
+    d3.csv(filepath, function (error, rows) {
+      that.draw(that.rowsToGraph(rows), options);
+    });
+  };
+
+
   this.draw = function (graph, options) {
 
     var options = options || {};
@@ -131,6 +219,7 @@ function CoincidenceTextGraph(selector) {
 
   };
 
+
   this.createLegend = function () {
 
     var that = this;
@@ -180,7 +269,7 @@ function CoincidenceTextGraph(selector) {
       .style("font-size", "" + fontSize + "px");
 
     // sizes
-    
+
     var legendSize = g.append("g")
       .attr("transform", "translate(" + forceWidth + ", 200)");
 
