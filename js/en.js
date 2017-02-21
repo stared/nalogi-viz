@@ -7,4 +7,4 @@ var cGraph = new CoincidenceTextGraph("#d3graph");
 // });
 
 cGraph.fromCSV("data/addictions.csv",
-               {baseCharge: -45, maxSize: 22, eoThresholdMin: 1, legend: true});
+               {baseCharge: -70, maxSize: 30, eoThresholdMin: 1, legend: true});
