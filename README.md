@@ -3,7 +3,7 @@
 * Raw, on this repo: [http://p.migdal.pl/nalogi-viz/en.html](p.migdal.pl/nalogi-viz/en.html)
 * On Mikołaj Czyż blog: [The experiment on addictions early results - coincidence graph](https://mikolajczyz.com/general/research-addictions-results/#cloud)
 
-[![Addictive tendencies - a magnetic cloud - screenshot](screenshot_em.png)](http://p.migdal.pl/nalogi-viz/en.html)
+[![Addictive tendencies - a magnetic cloud - screenshot](screenshot_en.png)](http://p.migdal.pl/nalogi-viz/en.html)
 
 
 # (polski) Nałogi: co dają, co zwalczają
