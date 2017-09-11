@@ -1,6 +1,6 @@
 # (english) Addictive tendencies - a magnetic cloud - screenshot
 
-* Raw, on this repo: [http://p.migdal.pl/nalogi-viz/en.html](p.migdal.pl/nalogi-viz/en.html)
+* Raw, on this repo: [p.migdal.pl/nalogi-viz/en.html](http://p.migdal.pl/nalogi-viz/en.html)
 * On Mikołaj Czyż blog: [The experiment on addictions early results - coincidence graph](https://mikolajczyz.com/general/research-addictions-results/#cloud)
 
 [![Addictive tendencies - a magnetic cloud - screenshot](screenshot_en.png)](http://p.migdal.pl/nalogi-viz/en.html)
